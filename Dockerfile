@@ -9,7 +9,7 @@ LABEL org.label-schema.name="baikal+infcloud - CalDAV/CardDAV web stack" \
 # The fork of 0.4.6 with fixed php7.2 each() deprecation and updates sabredav
 # see PR https://github.com/sabre-io/Baikal/pull/768 was merged and released
 # as Version 0.5.2 which fixed issues with php7
-ENV URL_BAIKAL=https://github.com/sabre-io/Baikal/releases/download/0.5.2/baikal-0.5.2.zip
+ENV URL_BAIKAL=https://github.com/sabre-io/Baikal/releases/download/0.8.0/baikal-0.8.0.zip
 ENV URL_INFCLOUD=https://www.inf-it.com/InfCloud_0.13.1.zip
 ENV WEBROOT=/var/www
 ENV BAIKAL_DATA=${WEBROOT}/baikal/Specific
@@ -41,7 +41,7 @@ COPY infcloud.config.js ${WEBROOT}/infcloud/config.js
 COPY docker-entrypoint.sh /
 
 # limit file permissions, see docker-entrypoint.sh
-RUN chown -R lighttpd:nobody ${WEBROOT} && chmod -R g-w ${WEBROOT}
+RUN chown -R lighttpd:nobody ${WEBROOT} && chmod -R g-w ${WEBROOT} && chmod -R g+w ${WEBROOT}/baikal/Specific ${WEBROOT}/baikal/config
 
 # Put sqlite database and configuration on a volume to preserve for updates
 VOLUME ["${BAIKAL_DATA}"]
