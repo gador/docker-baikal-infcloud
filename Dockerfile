@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.14
 
 # See http://label-schema.org/rc1/ and https://microbadger.com/labels
 LABEL org.label-schema.name="baikal+infcloud - CalDAV/CardDAV web stack" \
@@ -13,6 +13,7 @@ ENV URL_BAIKAL=https://github.com/sabre-io/Baikal/releases/download/0.8.0/baikal
 ENV URL_INFCLOUD=https://www.inf-it.com/InfCloud_0.13.1.zip
 ENV WEBROOT=/var/www
 ENV BAIKAL_DATA=${WEBROOT}/baikal/Specific
+ENV BAIKAL_CONFIG=${WEBROOT}/baikal/config
 
 ARG TIMEZONE=Europe/Berlin
 ENV TIMEZONE=${TIMEZONE}
@@ -38,20 +39,17 @@ RUN apk upgrade --no-cache \
 
 COPY lighttpd.conf /etc/lighttpd/lighttpd.conf
 COPY infcloud.config.js ${WEBROOT}/infcloud/config.js
-COPY docker-entrypoint.sh /
 
-# limit file permissions, see docker-entrypoint.sh
-RUN chown -R lighttpd:nobody ${WEBROOT} && chmod -R g-w ${WEBROOT} && chmod -R g+w ${WEBROOT}/baikal/Specific ${WEBROOT}/baikal/config
+# limit access to lighttpd
+RUN chown -R lighttpd:nobody ${WEBROOT} && chmod -R g-w ${WEBROOT}
 
 # Put sqlite database and configuration on a volume to preserve for updates
 VOLUME ["${BAIKAL_DATA}"]
-
-# Run CMD as user nobody, the shared volume will have 
-# hosts file permissions and needs to be writable for the user
-# the entrypoint will remap the uid of "nobody" to match the host's uid.
-ENTRYPOINT [ "/docker-entrypoint.sh" ]
+VOLUME ["${BAIKAL_CONFIG}"]
 
 EXPOSE 8800
 
 # using default entrypoint as we have a single purpose.
+# start cmd as user lighttpd
+USER lighttpd
 CMD [ "lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf" ]
