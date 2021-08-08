@@ -2,14 +2,13 @@ version: "3"
 
 services:
   baikal:
-    build: .
+    build:
+     context: .
     ports:
       - "8800:8800"
     volumes:
-      - ./baikal:/var/www/baikal/Specific
-      - ./lighttpd.conf:/etc/lighttpd/lighttpd.conf:ro
-      - ./infcloud.config.js:/var/www/infcloud/config.js:ro
-
+      - baikal-data:/var/www/baikal/Specific
+      - baikal-config:/var/www/baikal/config
   # uncomment for mysql
   # https://github.com/bianjp/docker-mariadb-alpine/blob/master/docker-entrypoint.sh
   mysql:
@@ -25,3 +24,5 @@ services:
       - baikal-mysql:/var/lib/mysql
 volumes:
   baikal-mysql:
+  baikal-data:
+  baikal-config:

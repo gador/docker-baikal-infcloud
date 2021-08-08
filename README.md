@@ -2,9 +2,9 @@
 - Dockerized 
 - [lighttpd](https://www.lighttpd.net/)
 - php7 + sqlite3 and mysql support
-- [baikal](https://github.com/sabre-io/Baikal) 0.5.2
+- [baikal](https://github.com/sabre-io/Baikal) 0.8.0
 - [infcloud](https://www.inf-it.com/open-source/clients/infcloud/) 0.1.13
-- [Alpine Linux](https://mirrordocker.com/_/alpine) 3.9
+- [Alpine Linux](https://mirrordocker.com/_/alpine) 3.14
 - targets NAS
 
 ![Infcloud webinterface](doc/infcloud.png)
