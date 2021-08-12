@@ -40,6 +40,10 @@ RUN apk upgrade --no-cache \
 COPY lighttpd.conf /etc/lighttpd/lighttpd.conf
 COPY infcloud.config.js ${WEBROOT}/infcloud/config.js
 
+# fix TimeZone issue.
+# See https://github.com/sabre-io/dav/issues/1318
+COPY Plugin.php ${WEBROOT}/baikal/vendor/sabre/dav/lib/CalDAV/Plugin.php
+
 # limit access to lighttpd
 RUN chown -R lighttpd:nobody ${WEBROOT} && chmod -R g-w ${WEBROOT}
 
